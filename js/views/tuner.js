@@ -46,8 +46,19 @@ function renderTunables(car, baseline){
     h('label',{}, 'Spring Rate', h('input',{type:'number', value:car.tunables.springRate, oninput:(e)=>{ car.tunables.springRate=parseFloat(e.target.value); refreshRight(car, baseline);} })),
     h('label',{}, 'Damper Setting', h('input',{type:'number', value:car.tunables.damperSetting, oninput:(e)=>{ car.tunables.damperSetting=parseFloat(e.target.value); refreshRight(car, baseline);} }))
   );
-  const resetBtn = h('button',{class:'btn-ghost', onclick:()=>{ const tx=car.parts.transmission; car.tunables.gearRatios = tx?.tunables?.gearRatios?.slice()||car.tunables.gearRatios; refreshRight(car, baseline); }}, 'Reset Tunables');
-  return h('div',{class:'card'}, h('h3',{},'Tunables'), fields, resetBtn);
+  const resetBtn = h('button',{class:'btn-ghost', onclick:()=>{
+    const tx=car.parts.transmission;
+    // Reset all tunables back to part defaults or sensible baselines
+    car.tunables.gearRatios = tx?.tunables?.gearRatios?.slice()||car.tunables.gearRatios;
+    car.tunables.finalDrive = tx?.stats?.finalDrive ?? car.tunables.finalDrive;
+    car.tunables.wingAngle = (car.parts.aero?.tunables?.wingAngle ?? 0);
+    car.tunables.tirePressurePsi = 30;
+    car.tunables.springRate = 35;
+    car.tunables.damperSetting = 5;
+    refreshTunables(car, baseline);
+    refreshRight(car, baseline);
+  }}, 'Reset Tunables');
+  return h('div',{class:'card', id:'tunerPanel'}, h('h3',{},'Tunables'), fields, resetBtn);
 }
 
 function renderDerived(car, baseline){
@@ -88,6 +99,13 @@ function refreshRight(car, baseline){
   const panel = document.getElementById('derivedPanel');
   if(!panel) return;
   const fresh = renderDerived(car, baseline);
+  panel.replaceWith(fresh);
+}
+
+function refreshTunables(car, baseline){
+  const panel = document.getElementById('tunerPanel');
+  if(!panel) return;
+  const fresh = renderTunables(car, baseline);
   panel.replaceWith(fresh);
 }
 
