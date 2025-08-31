@@ -21,6 +21,7 @@ export function seedInitial(){
     version:1,
     integrity:{ debugEverEnabled:false, scoresDisabled:false },
     settings:{ reducedMotion:false, highContrast:false },
+    meta:{ starterNamed:false },
     player:{ money:2500, prestige:0, ladderTier:0, garage:[starter], inventory:[] },
     catalog:{ parts: allParts(), tracks: TRACKS, ladder: LADDER },
     temp:{},

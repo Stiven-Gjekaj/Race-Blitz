@@ -21,7 +21,8 @@ export function computeRacePoints(positions, fastestLapCarId){
 export function updateChampionshipStandings(standings, raceResult){
   const pts = computeRacePoints(raceResult.order, raceResult.fastestLap.carId);
   for(const id of raceResult.order){
-    if(!standings[id]) standings[id] = { points:0, finishes:[] };
+    if(!standings[id]) standings[id] = { points:0, finishes:[], name: raceResult.names?.[id] || id };
+    if(!standings[id].name && raceResult.names?.[id]) standings[id].name = raceResult.names[id];
     standings[id].points += pts.get(id)||0;
     standings[id].finishes.push(raceResult.order.indexOf(id)+1);
   }
@@ -44,6 +45,7 @@ export function runRaceEvent(opts){
 
   // pre-derive
   const derived = new Map(grid.map(c=>[c.id, recomputeCarDerived(c)]));
+  const names = Object.fromEntries(grid.map(c=>[c.id, c.name || (c.id==='player'?'Player':'AI') ]));
 
   // Race accumulation
   const timesMs = new Map(grid.map(c=>[c.id, 0]));
@@ -89,6 +91,5 @@ export function runRaceEvent(opts){
   const perCar = Object.fromEntries([...derived.entries()].map(([id,d])=>[id,{
     speed:(220/Math.max(120,d.topSpeedKph)), accel:(8/Math.max(3.5,d.zeroTo100)), corner:1/Math.max(0.6,d.handlingIndex), brake:1/Math.max(0.6,d.brakingIndex)
   }]));
-  return { order, times:Object.fromEntries(timesMs), fastestLap:{...fastestLap}, forecast, perCar, points: computeRacePoints(order, fastestLap.carId) };
+  return { order, times:Object.fromEntries(timesMs), fastestLap:{...fastestLap}, forecast, perCar, names, points: computeRacePoints(order, fastestLap.carId) };
 }
-

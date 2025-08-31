@@ -4,6 +4,7 @@ import { TRACKS } from '../tracks.js';
 import { recommendStrategy } from '../strategy.js';
 import { RNG } from '../rng.js';
 import { generateWeatherTimeline } from '../weather.js';
+import { h as hh } from '../ui.js';
 
 export function renderChampionships(){
   const s = getState();
@@ -21,12 +22,17 @@ export function renderChampionships(){
 
   const startBtn = h('button',{class:'btn', onclick:()=>startRace(track, tier, forecast)}, 'Start Race');
 
+  const progress = renderProgress();
+  const standings = renderStandingsMini();
+
   return h('div',{class:'grid'},
     h('div',{class:'card'}, h('h3',{},'Ladder'),
       s.catalog.ladder.map((t,idx)=> h('div',{class:'row'}, h('div',{}, t.name, idx===s.player.ladderTier? h('span',{class:'badge ok', style:'margin-left:8px'},'Current'):null), h('div',{}, `${t.events} races`)))
     ),
     trackCard,
     h('div',{class:'card'}, h('h3',{},'Predicted Finish Range'), h('div',{class:'muted'}, 'P5–P9 (rough heuristic)')), 
+    progress,
+    standings,
     h('div',{}, startBtn)
   );
 }
@@ -55,7 +61,24 @@ function iconFor(state){
 }
 
 function startRace(track, tier, forecast){
-  // Signal app to start race via hash
+  // Signal app to start race but stay within #championships route
   sessionStorage.setItem('RB_NEXT_RACE_CTX', JSON.stringify({ trackId:track.id, tierIdx:tier?0:0, forecast }));
-  location.hash = '#race';
+  location.hash = '#championships?run=1';
+}
+
+function renderProgress(){
+  const s = getState();
+  const active = s.championship.active;
+  const tier = s.catalog.ladder[s.player.ladderTier];
+  const done = active?.racesCompleted||0;
+  const total = tier.events;
+  return h('div',{class:'card'}, h('h3',{},'Season Progress'), h('div',{}, `${done} / ${total} races completed`));
+}
+
+function renderStandingsMini(){
+  const s = getState();
+  const st = s.championship.standings||{};
+  const entries = Object.entries(st).sort((a,b)=> (b[1].points||0)-(a[1].points||0)).slice(0,12);
+  const rows = entries.map(([id,rec],idx)=> h('tr',{}, h('td',{}, idx+1), h('td',{}, rec.name||id), h('td',{}, rec.points||0)));
+  return h('div',{class:'card'}, h('h3',{},'Current Standings'), h('table',{class:'table'}, h('thead',{}, h('tr',{}, h('th',{},'#'), h('th',{},'Driver'), h('th',{},'Pts'))), h('tbody',{}, ...rows)));
 }

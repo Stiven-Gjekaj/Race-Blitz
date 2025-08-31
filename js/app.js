@@ -48,10 +48,21 @@ function render(){
   else if(hash==='#leaderboard') mount(app, renderLeaderboard());
   else if(hash==='#saveload') mount(app, renderSaveLoad());
   else if(hash==='#debug') mount(app, renderDebug());
+  else if(hash==='#race') mount(app, renderRaceResult());
 }
 
 function boot(){
   const s = loadOrSeed();
+  // One-time prompt to name starter car
+  try{
+    if(!s.meta) s.meta = { starterNamed:false };
+    if(!s.meta.starterNamed){
+      const car = s.player.garage[0];
+      const name = prompt('Name your starter car', car?.name||'My Car');
+      if(name && name.trim()) car.name = name.trim();
+      s.meta.starterNamed = true; setState(s);
+    }
+  }catch{}
   document.body.dataset.reducedMotion = s.settings.reducedMotion;
   document.body.dataset.contrast = s.settings.highContrast? 'high':'normal';
   mountRerender(render);

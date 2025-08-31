@@ -7,6 +7,7 @@ export function generateAICarForTier(tier, rng, index=0){
   const budget = budgetBase + rng.int(0, 1200);
   const philosophy = rng.int(0,2); // 0 power, 1 grip, 2 aero
   const car = baseChassis(`ai_${index}`);
+  car.name = makeDriverName(rng);
   let money = budget;
   function pick(cat, pref){
     const opts = partsByCategory(cat).slice().sort((a,b)=>a.price-b.price);
@@ -38,3 +39,11 @@ function baseChassis(id){
   };
 }
 
+const FIRST = ['Alex','Liam','Noah','Mason','Ethan','Ava','Mia','Leo','Oscar','Felix','Sofia','Nina','Luca','Max','Oliver','Aiden','Mateo','Kai','Noel','Theo'];
+const LAST = ['Reyes','Kovac','Ishikawa','Silva','Vargas','Petrov','Khan','Nguyen','Rossi','Schmidt','Dubois','Tanaka','Murphy','Nowak','Santos','Yamada','Kumar','Anders','Ibrahim','Lopez'];
+
+function makeDriverName(rng){
+  const f = FIRST[rng.int(0, FIRST.length-1)];
+  const l = LAST[rng.int(0, LAST.length-1)];
+  return `${f} ${l}`;
+}
