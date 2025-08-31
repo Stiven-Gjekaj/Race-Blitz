@@ -20,6 +20,10 @@ function renderPartSelectors(car, baseline, onApplied){
           const val = e.target.value;
           if(!val){ const stockId = stockIdFor(cat); if(stockId){ car.parts[cat] = partById(stockId); } }
           else { car.parts[cat] = partById(val); }
+          // When transmission or aero changes, tuner fields (gear count/wing) may change
+          if(cat==='transmission' || cat==='aero'){
+            refreshTunables(car, baseline);
+          }
           refreshRight(car, baseline); 
         } },
         ...(stockIdFor(cat)? [h('option',{value:''},'Stock/None')] : []),
@@ -47,14 +51,11 @@ function renderTunables(car, baseline){
     h('label',{}, 'Damper Setting', h('input',{type:'number', value:car.tunables.damperSetting, oninput:(e)=>{ car.tunables.damperSetting=parseFloat(e.target.value); refreshRight(car, baseline);} }))
   );
   const resetBtn = h('button',{class:'btn-ghost', onclick:()=>{
-    const tx=car.parts.transmission;
-    // Reset all tunables back to part defaults or sensible baselines
-    car.tunables.gearRatios = tx?.tunables?.gearRatios?.slice()||car.tunables.gearRatios;
-    car.tunables.finalDrive = tx?.stats?.finalDrive ?? car.tunables.finalDrive;
-    car.tunables.wingAngle = (car.parts.aero?.tunables?.wingAngle ?? 0);
-    car.tunables.tirePressurePsi = 30;
-    car.tunables.springRate = 35;
-    car.tunables.damperSetting = 5;
+    // Reset tunables to sensible defaults based on installed parts
+    car.tunables = defaultTunablesForCar(car);
+    // Persist immediately so the change takes effect outside this panel
+    car.derived = recomputeCarDerived(car);
+    updateCar(car);
     refreshTunables(car, baseline);
     refreshRight(car, baseline);
   }}, 'Reset Tunables');
@@ -107,6 +108,23 @@ function refreshTunables(car, baseline){
   if(!panel) return;
   const fresh = renderTunables(car, baseline);
   panel.replaceWith(fresh);
+}
+
+function defaultTunablesForCar(car){
+  const tx = car.parts.transmission;
+  const aero = car.parts.aero;
+  const fallbackRatios = [3.50,2.10,1.45,1.15,0.90];
+  const gearRatios = (tx?.tunables?.gearRatios?.slice?.()||fallbackRatios).slice();
+  const finalDrive = tx?.stats?.finalDrive ?? 3.7;
+  const wingAngle = aero?.tunables?.wingAngle ?? 0;
+  return {
+    gearRatios,
+    finalDrive,
+    wingAngle,
+    tirePressurePsi:30,
+    springRate:35,
+    damperSetting:5
+  };
 }
 
 function hideAsStock(cat, p){
