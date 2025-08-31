@@ -48,7 +48,7 @@ body[data-reduced-motion="true"] *{transition:none !important;animation:none !im
 
 input,select,textarea{background:var(--surface-2);border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px}
 input:focus,select:focus,textarea:focus{outline:3px solid var(--focus)}
-label{display:flex;gap:8px;align-items:center;margin:6px 0}
+label{display:flex;gap:10px;align-items:center;margin:8px 0}
 fieldset{border:1px solid var(--border);border-radius:12px;padding:12px}
 legend{padding:0 6px}
 
@@ -59,11 +59,11 @@ legend{padding:0 6px}
 .flex{display:flex;gap:10px;align-items:center}
 .grow{flex:1}
 
-.kpi{display:flex;gap:8px;flex-wrap:wrap}
+.kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
 .kpi .pill{background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:6px 10px}
 
 .icon{width:16px;height:16px;fill:currentColor}
-.row{display:flex;align-items:center;justify-content:space-between;padding:8px;border-bottom:1px solid var(--border)}
+.row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
 .row:last-child{border-bottom:0}
 .car-title{font-size:1.25rem;font-weight:700;margin-bottom:8px}
 

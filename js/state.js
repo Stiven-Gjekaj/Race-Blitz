@@ -39,7 +39,7 @@ function makeStarterCar(){
       engine: partById('eng_i4_14_na'), transmission: partById('tx_5m_basic'),
       differential: partById('diff_open'), suspension: partById('sus_comfort'),
       brakes: partById('brk_vent'), tires: partById('ti_eco'),
-      aero: null, body: null, intake: null, exhaust: null, ecu: partById('ecu_basic'),
+      aero: null, body: null, intake: null, exhaust: null, ecu: null,
       fuel: partById('fuel_std'), cooling: partById('cool_std')
     },
     tunables:{ gearRatios:[3.50,2.10,1.45,1.15,0.90], finalDrive:3.9, wingAngle:0, tirePressurePsi:30, springRate:35, damperSetting:5 },

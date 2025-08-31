@@ -16,9 +16,16 @@ function renderPartSelectors(car, baseline, onApplied){
   const cats = ['engine','transmission','differential','suspension','brakes','tires','aero','body','intake','exhaust','ecu','fuel','cooling'];
   const groups = cats.map(cat=> h('div',{},
     h('label',{}, h('span',{}, cat),
-      h('select',{ value: car.parts[cat]?.id||'', onchange:(e)=>{ car.parts[cat] = e.target.value? partById(e.target.value): null; refreshRight(car, baseline); } },
+      h('select',{ value: selectValueFor(cat, car.parts[cat]), onchange:(e)=>{ 
+          const val = e.target.value;
+          if(!val){ const stockId = stockIdFor(cat); car.parts[cat] = stockId? partById(stockId) : null; }
+          else { car.parts[cat] = partById(val); }
+          refreshRight(car, baseline); 
+        } },
         h('option',{value:''},'Stock/None'),
-        ...partsByCategory(cat).map(p=> h('option',{value:p.id, selected: car.parts[cat]?.id===p.id}, `${p.name} ($${p.price})`))
+        ...partsByCategory(cat)
+          .filter(p=>!hideAsStock(cat,p))
+          .map(p=> h('option',{value:p.id}, `${p.name} ($${p.price})`))
       )
     )
   ));
@@ -84,4 +91,18 @@ function refreshRight(car, baseline){
   if(!panel) return;
   const fresh = renderDerived(car, baseline);
   panel.replaceWith(fresh);
+}
+
+function hideAsStock(cat, p){
+  // Hide any zero-price part as Stock/None
+  return p.price === 0;
+}
+function stockIdFor(cat){
+  const stock = partsByCategory(cat).find(p=>p.price===0);
+  return stock?.id || null;
+}
+function selectValueFor(cat, part){
+  if(!part) return '';
+  if(part.price===0) return '';
+  return part.id;
 }

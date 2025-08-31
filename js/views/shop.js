@@ -6,16 +6,19 @@ import { buyPart, sellPart } from '../economy.js';
 export function renderShop(){
   const s = getState();
   const cat = new URLSearchParams(location.hash.split('?')[1]||'').get('cat')||'engine';
-  const list = allParts().filter(p=>p.category===cat);
+  const partsInCat = allParts().filter(p=>p.category===cat);
+  const hasStock = partsInCat.some(p=>p.price===0);
+  const list = partsInCat.filter(p=>p.price>0);
   const cats = ['engine','intake','exhaust','ecu','transmission','differential','suspension','brakes','tires','aero','body','fuel','cooling'];
   const catButtons = cats.map(c=> h('a',{href:`#shop?cat=${c}`, class:`btn-ghost ${cat===c?'active':''}`}, c));
 
   const table = h('table',{class:'table'},
-    h('thead',{}, h('tr',{}, h('th',{},'Part'), h('th',{},'Deltas'), h('th',{},'Price'), h('th',{},''))),
+    h('thead',{}, h('tr',{}, h('th',{},'Part'), h('th',{},'Tier'), h('th',{},'Deltas'), h('th',{},'Price'), h('th',{},''))),
     h('tbody',{}, ...list.map(p=>{
       const owned = s.player.inventory.some(x=>x.id===p.id);
       return h('tr',{},
         h('td',{}, h('strong',{},p.name), h('div',{class:'muted'}, p.category)),
+        h('td',{}, tierBadge(p.price)),
         h('td',{}, describeDelta(p)),
         h('td',{}, fmt.money(p.price)),
         h('td',{},
@@ -28,7 +31,7 @@ export function renderShop(){
 
   return h('div',{class:'grid'},
     h('div',{class:'card'}, h('h3',{},'Categories'), h('div',{class:'flex', style:'flex-wrap:wrap;gap:8px'}, ...catButtons)),
-    h('div',{class:'card'}, h('h3',{},`Parts: ${cat}`), table)
+    h('div',{class:'card'}, h('h3',{},`Parts: ${cat} `, hasStock? h('span',{class:'badge'},'Stock'): null), table)
   );
 }
 
@@ -46,3 +49,16 @@ function describeDelta(p){
   return arr.join(', ');
 }
 
+function tierBadge(price){
+  const {label,color} = priceToTier(price);
+  return h('span',{class:'badge', style:`border-color:${color};color:${color}`}, label);
+}
+
+function priceToTier(price){
+  // Simple heuristic tiering by price bands
+  if(price<=300) return {label:'T1 Entry', color:'#7dd3a7'};
+  if(price<=900) return {label:'T2 Club', color:'#a1c9f1'};
+  if(price<=1800) return {label:'T3 Sport', color:'#ffd166'};
+  if(price<=3600) return {label:'T4 Pro', color:'#f4a261'};
+  return {label:'T5 Elite', color:'#e10600'};
+}

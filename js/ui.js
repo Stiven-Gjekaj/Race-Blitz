@@ -3,13 +3,14 @@
 /** Create element with props and children */
 export function h(tag, props={}, ...children){
   const el = document.createElement(tag);
-  let deferValue, deferChecked;
+  let deferValue, deferChecked, deferSelected;
   for(const [k,v] of Object.entries(props||{})){
     if(k === 'class') el.className = v;
     else if(k === 'dataset'){ Object.assign(el.dataset, v); }
     else if(k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2), v);
     else if(k === 'value'){ deferValue = v; }
     else if(k === 'checked'){ deferChecked = v; }
+    else if(k === 'selected'){ deferSelected = v; }
     else if(v !== undefined && v !== null) el.setAttribute(k, v);
   }
   for(const c of children.flat()){
@@ -19,6 +20,7 @@ export function h(tag, props={}, ...children){
   }
   if(deferValue !== undefined) el.value = deferValue;
   if(deferChecked !== undefined) el.checked = !!deferChecked;
+  if(deferSelected !== undefined) el.selected = !!deferSelected;
   return el;
 }
 

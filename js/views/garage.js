@@ -6,7 +6,7 @@ export function renderGarage(){
   const s = getState();
   const car = s.player.garage[0];
   const row = h('div',{class:'row'},
-    h('div',{}, h('div',{class:'car-title'}, h('strong',{}, car.name)), ' ', h('span',{class:'muted'}, `ID: ${car.id}`),
+    h('div',{}, h('div',{class:'car-title'}, h('strong',{}, car.name)),
       h('div',{class:'kpi'},
         pill('Perf', car.derived?.performanceScore?.toFixed(3)),
         pill('Top', car.derived?.topSpeedKph+' km/h'),
