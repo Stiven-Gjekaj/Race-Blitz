@@ -65,6 +65,17 @@ function boot(){
   }catch{}
   document.body.dataset.reducedMotion = s.settings.reducedMotion;
   document.body.dataset.contrast = s.settings.highContrast? 'high':'normal';
+  // Mobile detection: coarse pointer or small viewport
+  function detectMobile(){
+    const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    const narrow = window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
+    const touch = ('ontouchstart' in window) || (navigator.maxTouchPoints||0) > 0;
+    const isMobile = (coarse && touch) || narrow;
+    document.body.dataset.mobile = isMobile ? 'true' : 'false';
+  }
+  detectMobile();
+  window.addEventListener('resize', detectMobile);
+  window.addEventListener('orientationchange', detectMobile);
   mountRerender(render);
   // Keyboard Ctrl+`
   window.addEventListener('keydown', (e)=>{
