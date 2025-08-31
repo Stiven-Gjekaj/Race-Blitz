@@ -39,7 +39,6 @@ export const fmt = {
 export function svgIcon(name){
   const use = document.createElementNS('http://www.w3.org/2000/svg','svg');
   use.setAttribute('class','icon');
-  use.innerHTML = `<use href="/assets/icons.svg#${name}"></use>`;
+  use.innerHTML = `<use href="assets/icons.svg#${name}"></use>`;
   return use;
 }
-

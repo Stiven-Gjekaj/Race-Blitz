@@ -10,7 +10,7 @@ function iconWithTemp(state, temp){
   return wrap;
 }
 
-function svg(name){ const el = document.createElementNS('http://www.w3.org/2000/svg','svg'); el.setAttribute('class','icon'); el.innerHTML = `<use href="/assets/icons.svg#${name}"></use>`; return el; }
+function svg(name){ const el = document.createElementNS('http://www.w3.org/2000/svg','svg'); el.setAttribute('class','icon'); el.innerHTML = `<use href="assets/icons.svg#${name}"></use>`; return el; }
 function iconFor(state){
   if(state==='dry') return 'sun';
   if(state==='hot') return 'sun';
@@ -22,4 +22,3 @@ function iconFor(state){
   if(state==='wetting') return 'rain';
   return 'cloud';
 }
-

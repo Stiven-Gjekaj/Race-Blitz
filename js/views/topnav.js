@@ -24,7 +24,6 @@ export function renderTopnav(){
 function svg(name){
   const el = document.createElementNS('http://www.w3.org/2000/svg','svg');
   el.setAttribute('class','icon');
-  el.innerHTML = `<use href="/assets/icons.svg#${name}"></use>`;
+  el.innerHTML = `<use href="assets/icons.svg#${name}"></use>`;
   return el;
 }
-

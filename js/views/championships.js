@@ -36,7 +36,7 @@ function weatherBadge(segs){
   for(const s of segs){
     const el = document.createElementNS('http://www.w3.org/2000/svg','svg');
     el.setAttribute('class','icon');
-    el.innerHTML = `<use href="/assets/icons.svg#${iconFor(s.state)}"></use>`;
+    el.innerHTML = `<use href="assets/icons.svg#${iconFor(s.state)}"></use>`;
     wrap.append(el, document.createTextNode(` ${s.tempC}°C `));
   }
   return wrap;
@@ -59,4 +59,3 @@ function startRace(track, tier, forecast){
   sessionStorage.setItem('RB_NEXT_RACE_CTX', JSON.stringify({ trackId:track.id, tierIdx:tier?0:0, forecast }));
   location.hash = '#race';
 }
-
