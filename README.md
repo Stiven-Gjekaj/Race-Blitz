@@ -2,10 +2,6 @@
 
 A lightweight single‑page racing manager built with vanilla HTML/CSS/JS (ES modules). Runs entirely in the browser with localStorage persistence and hash routing.
 
-## Run
-- Local: open `index.html` in a browser, or serve the folder with any static server.
-- GitHub Pages: push this folder as your site root or to `/docs` and enable Pages. All assets use relative paths so subpath hosting works.
-
 ## Routes
 - `#garage`: manage cars, open in Tuning, create/rename/sell.
 - `#shop`: browse categories, buy/sell parts.
