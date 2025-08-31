@@ -24,7 +24,7 @@ function render(){
   const hash = currentRoute();
   if(hash==='#garage') mount(app, renderGarage());
   else if(hash==='#shop') mount(app, renderShop());
-  else if(hash==='#tuning') mount(app, renderTuner());
+  else if(hash==='#tuning') mount(app, renderGarage());
   else if(hash==='#championships'){
     // If there is a pending race request in sessionStorage, run it then render result
     const ctxRaw = sessionStorage.getItem('RB_NEXT_RACE_CTX');

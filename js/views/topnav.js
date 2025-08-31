@@ -16,7 +16,7 @@ export function renderTopnav(){
   ];
   if(s.integrity.debugEverEnabled) tabs.push(['#debug','debug','Debug']);
   const links = tabs.map(([href,icon,label])=> h('a',{href, class: r===href?'active':''}, svg(icon), label));
-  const right = [h('span',{class:'badge'}, `Money: $${s.player.money}`), h('button',{class:'btn-ghost', onclick:()=>save.hardReset()}, 'Hard Reset')];
+  const right = [h('span',{class:'credits'}, 'Made by Stiven Gjekaj'), h('span',{class:'badge'}, `Money: $${s.player.money}`), h('button',{class:'btn-ghost', onclick:()=>save.hardReset()}, 'Hard Reset')];
   if(s.integrity.debugEverEnabled) right.unshift(h('span',{class:'badge warn'}, 'DEBUG'));
   return h('nav',{class:'topnav'}, h('div',{class:'tabs'}, ...links), h('div',{class:'top-actions'}, ...right));
 }

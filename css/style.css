@@ -20,6 +20,8 @@ body[data-reduced-motion="true"] *{transition:none !important;animation:none !im
 .tabs a{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;color:var(--text);text-decoration:none;background:var(--surface-2);border:1px solid var(--border)}
 .tabs a.active{outline:2px solid var(--accent)}
 .top-actions{display:flex;gap:8px;align-items:center}
+.credits{font-weight:800;color:#fff;padding:4px 8px;border-radius:8px;border:1px solid var(--border);background:linear-gradient(180deg, rgba(225,6,0,0.25), rgba(225,6,0,0.05));
+  -webkit-text-stroke: 0.5px #000; text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;}
 
 .btn{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#fff;padding:10px 14px;border:0;border-radius:10px;font-weight:700;cursor:pointer}
 .btn:hover{filter:brightness(1.05)}
@@ -63,5 +65,6 @@ legend{padding:0 6px}
 .icon{width:16px;height:16px;fill:currentColor}
 .row{display:flex;align-items:center;justify-content:space-between;padding:8px;border-bottom:1px solid var(--border)}
 .row:last-child{border-bottom:0}
+.car-title{font-size:1.25rem;font-weight:700;margin-bottom:8px}
 
 .footer-note{font-size:12px;color:var(--muted);margin-top:6px}
