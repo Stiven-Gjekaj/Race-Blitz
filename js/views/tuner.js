@@ -18,19 +18,17 @@ function renderPartSelectors(car, baseline, onApplied){
     h('label',{}, h('span',{}, cat),
       h('select',{ value: selectValueFor(cat, car.parts[cat]), onchange:(e)=>{ 
           const val = e.target.value;
-          if(!val){ const stockId = stockIdFor(cat); car.parts[cat] = stockId? partById(stockId) : null; }
+          if(!val){ const stockId = stockIdFor(cat); if(stockId){ car.parts[cat] = partById(stockId); } }
           else { car.parts[cat] = partById(val); }
           refreshRight(car, baseline); 
         } },
-        h('option',{value:''},'Stock/None'),
-        ...partsByCategory(cat)
-          .filter(p=>!hideAsStock(cat,p))
-          .map(p=> h('option',{value:p.id}, `${p.name} ($${p.price})`))
+        ...(stockIdFor(cat)? [h('option',{value:''},'Stock/None')] : []),
+        ...ownedOptionsFor(cat, car)
       )
     )
   ));
   const applyBtn = h('button',{class:'btn', onclick:()=>{ car.derived = recomputeCarDerived(car); updateCar(car); onApplied?.(); }}, 'Apply & Save');
-  return h('div',{class:'card'}, h('h3',{},'Parts'), ...groups, applyBtn);
+  return h('div',{class:'card'}, h('h3',{},'Parts (Owned)'), ...groups, applyBtn);
 }
 
 function renderTunables(car, baseline){
@@ -105,4 +103,23 @@ function selectValueFor(cat, part){
   if(!part) return '';
   if(part.price===0) return '';
   return part.id;
+}
+
+function ownedOptionsFor(cat, car){
+  const s = getState();
+  const inv = s.player.inventory.filter(p=>p.category===cat);
+  const seen = new Set(inv.map(p=>p.id));
+  const opts = [];
+  const cur = car.parts[cat];
+  if(cur && cur.price>0 && !seen.has(cur.id)){
+    opts.push(h('option',{value:cur.id}, `Installed: ${cur.name}`));
+  }
+  for(const p of inv){
+    if(hideAsStock(cat,p)) continue;
+    opts.push(h('option',{value:p.id}, `${p.name} ($${p.price})`));
+  }
+  if(opts.length===0){
+    opts.push(h('option',{value:'', disabled:true}, 'No owned parts'));
+  }
+  return opts;
 }

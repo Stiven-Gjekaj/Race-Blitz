@@ -9,7 +9,6 @@ export function renderTopnav(){
   const tabs = [
     ['#garage','home','Garage'],
     ['#shop','cart','Shop'],
-    ['#tuning','wrench','Tuning'],
     ['#championships','trophy','Championships'],
     ['#leaderboard','trophy','Leaderboard'],
     ['#saveload','save','Save/Load']
