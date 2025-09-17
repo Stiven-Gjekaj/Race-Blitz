@@ -15,7 +15,7 @@ export function renderGarage(){
       )
     ),
     h('div',{class:'flex'},
-      h('button',{class:'btn btn-ghost', onclick:()=>{ const name=prompt('Rename car', car.name); if(name){ car.name=name; setActiveCar(car.id); } }}, 'Rename')
+      h('button',{class:'btn-ghost', onclick:()=>{ const name=prompt('Rename car', car.name); if(name){ car.name=name; setActiveCar(car.id); } }}, 'Rename')
     )
   );
 
@@ -27,4 +27,3 @@ export function renderGarage(){
 }
 
 function pill(k,v){ return h('span',{class:'pill'}, `${k}: ${v}`); }
-

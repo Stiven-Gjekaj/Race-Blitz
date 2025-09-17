@@ -50,7 +50,7 @@ function renderTunables(car, baseline){
     h('label',{}, 'Spring Rate', h('input',{type:'number', value:car.tunables.springRate, oninput:(e)=>{ car.tunables.springRate=parseFloat(e.target.value); refreshRight(car, baseline);} })),
     h('label',{}, 'Damper Setting', h('input',{type:'number', value:car.tunables.damperSetting, oninput:(e)=>{ car.tunables.damperSetting=parseFloat(e.target.value); refreshRight(car, baseline);} }))
   );
-  const resetBtn = h('button',{class:'btn btn-ghost', onclick:()=>{
+  const resetBtn = h('button',{class:'btn-ghost', onclick:()=>{
     // Reset tunables to sensible defaults based on installed parts
     car.tunables = defaultTunablesForCar(car);
     // Persist immediately so the change takes effect outside this panel
@@ -159,4 +159,3 @@ function ownedOptionsFor(cat, car){
   }
   return opts;
 }
-
