@@ -80,5 +80,5 @@ function renderStandingsMini(){
   const st = s.championship.standings||{};
   const entries = Object.entries(st).sort((a,b)=> (b[1].points||0)-(a[1].points||0)).slice(0,12);
   const rows = entries.map(([id,rec],idx)=> h('tr',{}, h('td',{}, idx+1), h('td',{}, rec.name||id), h('td',{}, rec.points||0)));
-  return h('div',{class:'card'}, h('h3',{},'Current Standings'), h('table',{class:'table'}, h('thead',{}, h('tr',{}, h('th',{},'#'), h('th',{},'Driver'), h('th',{},'Pts'))), h('tbody',{}, ...rows)));
+  return h('div',{class:'card'}, h('h3',{},'Current Standings'), h('div',{class:'table-wrapper'}, h('table',{class:'table'}, h('thead',{}, h('tr',{}, h('th',{},'#'), h('th',{},'Driver'), h('th',{},'Pts'))), h('tbody',{}, ...rows)))));
 }

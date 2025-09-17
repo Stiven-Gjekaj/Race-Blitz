@@ -11,8 +11,9 @@ export function renderDebug(){
   const dnfs = h('label',{}, 'No DNFs', h('input',{type:'checkbox', checked:dbg.noDNFs, onchange:(e)=>{ dbg.noDNFs=e.target.checked; setState(s); }}));
   const ai = h('label',{}, 'AI Difficulty Offset', h('input',{type:'number', value:dbg.aiDifficulty, oninput:(e)=>{ dbg.aiDifficulty=parseInt(e.target.value||'0'); setState(s);} }));
   const grant = h('button',{class:'btn', onclick:()=>{ s.player.money+=5000; setState(s);} }, 'Grant $5,000');
-  const unlock = h('button',{class:'btn-ghost', onclick:()=>{ s.player.ladderTier=Math.min(s.player.ladderTier+1, s.catalog.ladder.length-1); setState(s);} }, 'Unlock Next Tier');
-  const recompute = h('button',{class:'btn-ghost', onclick:()=>{ for(const c of s.player.garage){ c.derived = null; } setState(s);} }, 'Recompute All Derived');
+  const unlock = h('button',{class:'btn btn-ghost', onclick:()=>{ s.player.ladderTier=Math.min(s.player.ladderTier+1, s.catalog.ladder.length-1); setState(s);} }, 'Unlock Next Tier');
+  const recompute = h('button',{class:'btn btn-ghost', onclick:()=>{ for(const c of s.player.garage){ c.derived = null; } setState(s);} }, 'Recompute All Derived');
   return h('div',{class:'grid'}, h('div',{class:'card'}, h('h3',{},'Debug Tools'), toggle, seed, dnfs, ai, h('div',{class:'flex'}, grant, unlock, recompute)));
 }
+
 

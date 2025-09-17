@@ -1,11 +1,56 @@
 // UI helpers
 
+function applyNesSkin(el){
+  const classes = new Set((el.className || '').split(/\s+/).filter(Boolean));
+  if(classes.size === 0) return;
+  const extras = new Set();
+
+  if(classes.has('btn')){
+    extras.add('nes-btn');
+    if(!classes.has('btn-ghost') && !classes.has('btn-danger')){
+      extras.add('is-primary');
+    }
+  }
+  if(classes.has('btn-ghost')){
+    extras.add('nes-btn');
+  }
+  if(classes.has('btn-danger')){
+    extras.add('nes-btn');
+    extras.add('is-error');
+  }
+  if(classes.has('card')){
+    extras.add('nes-container');
+  }
+  if(classes.has('table')){
+    extras.add('nes-table');
+    extras.add('is-bordered');
+    extras.add('is-centered');
+  }
+  if(classes.has('badge') || classes.has('pill')){
+    extras.add('nes-badge');
+  }
+  if(classes.has('warn')){
+    extras.add('is-warning');
+  }
+  if(classes.has('ok')){
+    extras.add('is-success');
+  }
+  if(classes.has('danger')){
+    extras.add('is-error');
+  }
+
+  extras.forEach(cls => el.classList.add(cls));
+}
+
 /** Create element with props and children */
 export function h(tag, props={}, ...children){
   const el = document.createElement(tag);
   let deferValue, deferChecked, deferSelected;
   for(const [k,v] of Object.entries(props||{})){
-    if(k === 'class') el.className = v;
+    if(k === 'class'){
+      el.className = v;
+      applyNesSkin(el);
+    }
     else if(k === 'dataset'){ Object.assign(el.dataset, v); }
     else if(k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2), v);
     else if(k === 'value'){ deferValue = v; }

@@ -11,9 +11,9 @@ export function renderRaceResult(){
   const rows = rr.order.map((id,idx)=> h('tr',{}, h('td',{}, 'P'+(idx+1)), h('td',{}, rr.names?.[id]||id), h('td',{}, fmt.time(rr.times[id]||0)), h('td',{}, rr.fastestLap.carId===id?'FL':''), h('td',{}, rr.points.get? (rr.points.get(id)||0) : (rr.points[id]||0))));
   const hdr = h('div',{class:'flex'}, h('div',{}, h('strong',{},'Weather:'), ' ', rr.forecast.map(s=>s.state).slice(0,6).join(' → ')), h('div',{}, h('strong',{},'Fastest Lap: '), rr.fastestLap.carId||'-', ' ', rr.fastestLap.lapMs? fmt.time(rr.fastestLap.lapMs) : ''));
   const updateBtn = h('button',{class:'btn', onclick:()=>applyStandings(rr)}, 'Update Championship Standings');
-  const backBtn = h('button',{class:'btn-ghost', onclick:()=>{ const s=getState(); delete s.temp.raceResult; setState(s); location.hash='#championships'; }}, 'Back to Championships');
+  const backBtn = h('button',{class:'btn btn-ghost', onclick:()=>{ const s=getState(); delete s.temp.raceResult; setState(s); location.hash='#championships'; }}, 'Back to Championships');
   return h('div',{class:'grid'},
-    h('div',{class:'card'}, h('h3',{},'Race Result'), hdr, h('table',{class:'table'}, h('thead',{}, h('tr',{}, h('th',{},'#'), h('th',{},'Car'), h('th',{},'Time'), h('th',{},'Badge'), h('th',{},'Pts'))), h('tbody',{}, ...rows))),
+    h('div',{class:'card'}, h('h3',{},'Race Result'), hdr, h('div',{class:'table-wrapper'}, h('table',{class:'table'}, h('thead',{}, h('tr',{}, h('th',{},'#'), h('th',{},'Car'), h('th',{},'Time'), h('th',{},'Badge'), h('th',{},'Pts'))), h('tbody',{}, ...rows)))),
     h('div',{class:'card'}, h('h3',{},'Actions'), h('div',{class:'flex'}, updateBtn, backBtn)),
     h('div',{class:'card'}, h('h3',{},'Why (contributions)'), h('div',{class:'muted'}, 'Speed/Accel/Corner/Brake factors influenced finishing times.')));
 }
@@ -43,3 +43,4 @@ function applyStandings(rr){
   setState(s);
   alert('Standings updated. Prize awarded if applicable.');
 }
+

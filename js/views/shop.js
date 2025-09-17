@@ -10,23 +10,30 @@ export function renderShop(){
   const hasStock = partsInCat.some(p=>p.price===0);
   const list = partsInCat.filter(p=>p.price>0);
   const cats = ['engine','intake','exhaust','ecu','transmission','differential','suspension','brakes','tires','aero','body','fuel','cooling'];
-  const catButtons = cats.map(c=> h('a',{href:`#shop?cat=${c}`, class:`btn-ghost ${cat===c?'active':''}`}, c));
+  const catButtons = cats.map(c=>{
+    const active = cat===c;
+    const base = active ? 'btn' : 'btn btn-ghost';
+    const cls = `${base} ${active ? 'active' : ''}`.trim();
+    return h('a',{href:`#shop?cat=${c}`, class:cls}, c);
+  });
 
-  const table = h('table',{class:'table'},
-    h('thead',{}, h('tr',{}, h('th',{},'Part'), h('th',{},'Tier'), h('th',{},'Deltas'), h('th',{},'Price'), h('th',{},''))),
-    h('tbody',{}, ...list.map(p=>{
-      const owned = s.player.inventory.some(x=>x.id===p.id);
-      return h('tr',{},
-        h('td',{}, h('strong',{},p.name), h('div',{class:'muted'}, p.category)),
-        h('td',{}, tierBadge(p.price)),
-        h('td',{}, describeDelta(p)),
-        h('td',{}, fmt.money(p.price)),
-        h('td',{},
-          owned ? h('button',{class:'btn-ghost', onclick:()=>sellPart(p.id)}, 'Sell (60%)')
-                : h('button',{class:'btn', onclick:()=>buyPart(p)}, 'Buy')
-        )
-      );
-    }))
+  const table = h('div',{class:'table-wrapper'},
+    h('table',{class:'table'},
+      h('thead',{}, h('tr',{}, h('th',{},'Part'), h('th',{},'Tier'), h('th',{},'Deltas'), h('th',{},'Price'), h('th',{},''))),
+      h('tbody',{}, ...list.map(p=>{
+        const owned = s.player.inventory.some(x=>x.id===p.id);
+        return h('tr',{},
+          h('td',{}, h('strong',{},p.name), h('div',{class:'muted'}, p.category)),
+          h('td',{}, tierBadge(p.price)),
+          h('td',{}, describeDelta(p)),
+          h('td',{}, fmt.money(p.price)),
+          h('td',{},
+            owned ? h('button',{class:'btn btn-ghost', onclick:()=>sellPart(p.id)}, 'Sell (60%)')
+                  : h('button',{class:'btn', onclick:()=>buyPart(p)}, 'Buy')
+          )
+        );
+      }))
+    )
   );
 
   return h('div',{class:'grid'},
@@ -62,3 +69,4 @@ function priceToTier(price){
   if(price<=3600) return {label:'T4 Pro', color:'#f4a261'};
   return {label:'T5 Elite', color:'#e10600'};
 }
+
